@@ -1,0 +1,107 @@
+name: "install-aws-cli-action"
+description: "Install AWS CLI on a Linux host"
+branding:
+  icon: "download-cloud"
+  color: "orange"
+inputs:
+  version:
+    description: "1=latest version of v1, 2=latest version of v2, #.#.#=specific version"
+    required: false
+    default: "2"
+  verbose:
+    description: "Prints ls commands to see changes in the filesystem"
+    required: false
+    default: "false"
+  lightsailctl:
+    description: "Install lightsailctl plugin"
+    required: false
+    default: "false"
+  arch:
+    description: Allowed values are - amd64, x86, x64, arm, arm64
+    required: false
+    default: amd64
+  bindir:
+    description: Bin directory full path, defaults to /usr/local/bin
+    required: false
+    default: /usr/local/bin
+  installrootdir:
+    description: Install directory full path, defaults to /usr/local
+    required: false
+    default: /usr/local
+  rootdir:
+    description: Root directory full path, defaults to PWD
+    required: false
+    default: "" # PWD
+  workdir:
+    description: Working directory full path, all files are downloaded and extracted in this directory
+    required: false
+    default: "" # PWD/unfor19-awscli
+outputs:
+  version:
+    description: "The AWS CLI version that was installed"
+    value: ${{ steps.set-output.outputs.version }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Subscription check
+      env:
+        REPO_PRIVATE: ${{ github.event.repository.private }}
+      run: |
+        # validate subscription status
+        UPSTREAM="unfor19/install-aws-cli-action"
+        ACTION_REPO="${GITHUB_ACTION_REPOSITORY:-}"
+        DOCS_URL="https://docs.stepsecurity.io/actions/stepsecurity-maintained-actions"
+
+        echo ""
+        echo -e "\033[1;36mStepSecurity Maintained Action\033[0m"
+        echo "Secure drop-in replacement for $UPSTREAM"
+        if [ "$REPO_PRIVATE" = "false" ]; then
+          echo -e "\033[32m✓ Free for public repositories\033[0m"
+        fi
+        echo -e "\033[36mLearn more:\033[0m $DOCS_URL"
+        echo ""
+
+        if [ "$REPO_PRIVATE" != "false" ]; then
+          SERVER_URL="${GITHUB_SERVER_URL:-https://github.com}"
+
+          if [ "$SERVER_URL" != "https://github.com" ]; then
+            BODY=$(printf '{"action":"%s","ghes_server":"%s"}' "$ACTION_REPO" "$SERVER_URL")
+          else
+            BODY=$(printf '{"action":"%s"}' "$ACTION_REPO")
+          fi
+
+          API_URL="https://agent.api.stepsecurity.io/v1/github/$GITHUB_REPOSITORY/actions/maintained-actions-subscription"
+
+          RESPONSE=$(curl --max-time 3 -s -w "%{http_code}" \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -d "$BODY" \
+            "$API_URL" -o /dev/null) && CURL_EXIT_CODE=0 || CURL_EXIT_CODE=$?
+
+          if [ $CURL_EXIT_CODE -ne 0 ]; then
+            echo "Timeout or API not reachable. Continuing to next step."
+          elif [ "$RESPONSE" = "403" ]; then
+            echo -e "::error::\033[1;31mThis action requires a StepSecurity subscription for private repositories.\033[0m"
+            echo -e "::error::\033[31mLearn how to enable a subscription: $DOCS_URL\033[0m"
+            exit 1
+          fi
+        fi
+      shell: bash
+    - id: set-env-vars
+      run: |
+        echo "AWS_CLI_VERSION=${{ inputs.version }}" >> $GITHUB_ENV
+        echo "AWS_CLI_ARCH=${{ inputs.arch }}" >> $GITHUB_ENV        
+        echo "VERBOSE=${{ inputs.verbose }}" >> $GITHUB_ENV
+        echo "LIGHTSAILCTL=${{ inputs.lightsailctl }}" >> $GITHUB_ENV
+        echo "BINDIR=${{ inputs.bindir }}" >> $GITHUB_ENV
+        echo "INSTALLROOTDIR=${{ inputs.installrootdir }}" >> $GITHUB_ENV
+        echo "ROOTDIR=${{ inputs.rootdir }}" >> $GITHUB_ENV
+        echo "WORKDIR=${{ inputs.workdir }}" >> $GITHUB_ENV
+      shell: bash
+    - id: install-aws-cli
+      run: sudo --preserve-env ${GITHUB_ACTION_PATH}/entrypoint.sh
+      shell: bash
+    - id: set-output
+      run: echo "version=$(aws --version)" >> $GITHUB_OUTPUT
+      shell: bash
