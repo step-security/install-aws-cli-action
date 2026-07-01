@@ -89,15 +89,24 @@ runs:
         fi
       shell: bash
     - id: set-env-vars
+      env:
+        INPUT_VERSION: ${{ inputs.version }}
+        INPUT_ARCH: ${{ inputs.arch }}
+        INPUT_VERBOSE: ${{ inputs.verbose }}
+        INPUT_LIGHTSAILCTL: ${{ inputs.lightsailctl }}
+        INPUT_BINDIR: ${{ inputs.bindir }}
+        INPUT_INSTALLROOTDIR: ${{ inputs.installrootdir }}
+        INPUT_ROOTDIR: ${{ inputs.rootdir }}
+        INPUT_WORKDIR: ${{ inputs.workdir }}
       run: |
-        echo "AWS_CLI_VERSION=${{ inputs.version }}" >> $GITHUB_ENV
-        echo "AWS_CLI_ARCH=${{ inputs.arch }}" >> $GITHUB_ENV        
-        echo "VERBOSE=${{ inputs.verbose }}" >> $GITHUB_ENV
-        echo "LIGHTSAILCTL=${{ inputs.lightsailctl }}" >> $GITHUB_ENV
-        echo "BINDIR=${{ inputs.bindir }}" >> $GITHUB_ENV
-        echo "INSTALLROOTDIR=${{ inputs.installrootdir }}" >> $GITHUB_ENV
-        echo "ROOTDIR=${{ inputs.rootdir }}" >> $GITHUB_ENV
-        echo "WORKDIR=${{ inputs.workdir }}" >> $GITHUB_ENV
+        echo "AWS_CLI_VERSION=$INPUT_VERSION" >> "$GITHUB_ENV"
+        echo "AWS_CLI_ARCH=$INPUT_ARCH" >> "$GITHUB_ENV"
+        echo "VERBOSE=$INPUT_VERBOSE" >> "$GITHUB_ENV"
+        echo "LIGHTSAILCTL=$INPUT_LIGHTSAILCTL" >> "$GITHUB_ENV"
+        echo "BINDIR=$INPUT_BINDIR" >> "$GITHUB_ENV"
+        echo "INSTALLROOTDIR=$INPUT_INSTALLROOTDIR" >> "$GITHUB_ENV"
+        echo "ROOTDIR=$INPUT_ROOTDIR" >> "$GITHUB_ENV"
+        echo "WORKDIR=$INPUT_WORKDIR" >> "$GITHUB_ENV"
       shell: bash
     - id: install-aws-cli
       run: sudo --preserve-env ${GITHUB_ACTION_PATH}/entrypoint.sh
