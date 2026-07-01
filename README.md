@@ -53,7 +53,7 @@ Add one of the following steps to a job in your workflow.
 
 ### Test with GitHub Matrix
 
-See [step-security/install-aws-cli-action-test/blob/master/.github/workflows/test-action.yml](https://github.com/step-security/install-aws-cli-action-test/blob/master/.github/workflows/test-action.yml)
+See [step-security/install-aws-cli-action-test/blob/master/.github/workflows/test-action.yml](https://github.com/step-security/install-aws-cli-action-test/blob/main/.github/workflows/test-action.yml)
 
 ```yaml
 name: test-action
@@ -106,29 +106,6 @@ jobs:
       sudo rm install-aws.sh
   ```
   **NOTE**: On some Docker images, you might need to add `sudo` in front of each command, like `sudo curl -L ..`, `sudo chmod ..`, etc.
-
-## Local Development
-
-<details>
-
-<summary>Expand/Collapse</summary>
-
-### Requirements
-
-- Docker
-
-### Getting Started
-
-1. Build Docker image
-   ```bash
-   docker build -t "install-aws-cli-action" .
-   ```
-1. Run container
-   ```bash
-   docker run --rm -it "install-aws-cli-action" "v2" "amd64"
-   ```
-
-</details>
 
 ## License
 

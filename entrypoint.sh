@@ -242,10 +242,10 @@ _INSTALLROOTDIR="${INSTALLROOTDIR:-"/usr/local"}"
 msg_log "Provided ROOTDIR: ${ROOT_DIR}"
 _ROOT_DIR="${ROOT_DIR:-$PWD}"
 msg_log "Provided WORKDIR: ${WORKDIR}"
-_WORKDIR="${WORKDIR:-${_ROOT_DIR}/unfor19-awscli}"
+_WORKDIR="${WORKDIR:-${_ROOT_DIR}/step-security-awscli}"
 msg_log "Final WORKDIR path: ${_WORKDIR}"
 
-_DOWNLOAD_FILENAME="unfor19-awscli.zip"
+_DOWNLOAD_FILENAME="step-security-awscli.zip"
 _VERBOSE=${VERBOSE:-"false"}
 _LIGHTSAIL_INSTALL=${LIGHTSAILCTL:-"false"}
 _DOWNLOAD_URL=""
