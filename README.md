@@ -8,9 +8,9 @@ Install/Setup AWS CLI on a GitHub Actions Linux host.
 
 After this action, every step is capable of running `aws` CLI, and it's up to you to set AWS credentials in the subsequent steps.
 
-Tested in [step-security/install-aws-cli-action-test](https://github.com/step-security/install-aws-cli-action-test/actions?query=workflow%3Atest-action)
+Tested in [step-security/install-aws-cli-action-test](https://github.com/step-security/install-aws-cli-action/actions/workflows/test.yaml)
 
-**TIP**: It's possible to use the [entrypoint.sh](https://github.com/step-security/install-aws-cli-action/blob/master/entrypoint.sh) script as a "bootstrap script to install/setup aws cli on Linux", regardless of GitHub Actions; see [Other Options](https://github.com/step-security/install-aws-cli-action#other-options) for more details.
+**TIP**: It's possible to use the [entrypoint.sh](https://github.com/step-security/install-aws-cli-action/blob/main/entrypoint.sh) script as a "bootstrap script to install/setup aws cli on Linux", regardless of GitHub Actions; see [Other Options](https://github.com/step-security/install-aws-cli-action#other-options) for more details.
 
 ## Usage
 
@@ -50,10 +50,6 @@ Add one of the following steps to a job in your workflow.
     rootdir: ""                        # defaults to "PWD"
     workdir: ""                        # defaults to "PWD/unfor19-awscli"
 ```
-
-### Test with GitHub Matrix
-
-See [step-security/install-aws-cli-action-test/blob/master/.github/workflows/test-action.yml](https://github.com/step-security/install-aws-cli-action-test/blob/main/.github/workflows/test-action.yml)
 
 ```yaml
 name: test-action
