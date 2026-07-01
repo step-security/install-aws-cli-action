@@ -150,7 +150,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-${{ matrix.AWS_CLI_VERSION }}-
       - name: Build Docker Image
-        uses: docker/build-push-action@v7
+        uses: step-security/docker-build-push-action@v7
         with:
           context: .
           builder: ${{ steps.buildx.outputs.name }}

@@ -229,7 +229,7 @@ test_lightsailctl(){
     if [[ -n "$installed_lightsail" ]]; then
         msg_log "Lightsail was installed successfully"
     else
-        error_msg "Failed to install lightsailctl"
+        msg_error "Failed to install lightsailctl"
     fi
 }
 
