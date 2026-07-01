@@ -32,7 +32,12 @@ jobs:
             INSTALLROOTDIR: "/tmp/aws"  
     name: Test ${{ matrix.TEST_NAME }}
     steps:
-      - uses: actions/checkout@v7
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Test On Runner
         env:
           AWS_CLI_VERSION: "${{ matrix.AWS_CLI_VERSION}}"
@@ -60,7 +65,12 @@ jobs:
           - TEST_NAME: "No Input"
     name: Test amd64 ${{ matrix.TEST_NAME }} ${{ matrix.AWS_CLI_VERSION}}
     steps:
-      - uses: actions/checkout@v7
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Test On Runner
         env:
           AWS_CLI_VERSION: "${{ matrix.AWS_CLI_VERSION}}"
@@ -84,7 +94,12 @@ jobs:
           - TEST_NAME: "No Input"
     name: Test amd64 ${{ matrix.TEST_NAME }} ${{ matrix.AWS_CLI_VERSION}}
     steps:
-      - uses: actions/checkout@v7
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Test On Runner
         env:
           AWS_CLI_VERSION: "${{ matrix.AWS_CLI_VERSION}}"
@@ -108,7 +123,12 @@ jobs:
           - TEST_NAME: "No Input"
     name: Test amd64 ${{ matrix.TEST_NAME }} ${{ matrix.AWS_CLI_VERSION}}
     steps:
-      - uses: actions/checkout@v7
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Test On Runner
         env:
           AWS_CLI_VERSION: "${{ matrix.AWS_CLI_VERSION}}"
@@ -128,12 +148,17 @@ jobs:
             AWS_CLI_VERSION: "2.0.30"
     name: Test arm64 ${{ matrix.TEST_NAME }} ${{ matrix.AWS_CLI_VERSION}}
     steps:
-      - uses: actions/checkout@v7
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Set up QEMU
-        uses: step-security/setup-qemu-action@v4
+        uses: step-security/setup-qemu-action@fe44c529aab16157fc475f4991a7f926aa9a02a2 # v4.1.0
       - name: Set up Docker Buildx
         id: buildx
-        uses: step-security/setup-buildx-action@v4
+        uses: step-security/setup-buildx-action@6997872a55d77391e51b87609556578131f44402 # v4.1.0
         with:
           install: true
       - name: Prepare
@@ -143,14 +168,14 @@ jobs:
           TAG=$(echo $GITHUB_SHA | head -c7)-${{ matrix.AWS_CLI_VERSION }}
           echo "tagged_image=${IMAGE}:${TAG}" >> ${GITHUB_OUTPUT}
       - name: Cache Docker layers
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ matrix.AWS_CLI_VERSION }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-${{ matrix.AWS_CLI_VERSION }}-
       - name: Build Docker Image
-        uses: step-security/docker-build-push-action@v7
+        uses: step-security/docker-build-push-action@9af9b5acc1751dcec2aa5375a068979fa526bc9a # v7.2.0
         with:
           context: .
           builder: ${{ steps.buildx.outputs.name }}
@@ -184,12 +209,17 @@ jobs:
             AWS_CLI_VERSION: "2.0.30"
     name: Test arm64 ${{ matrix.TEST_NAME }} ${{ matrix.AWS_CLI_VERSION}}
     steps:
-      - uses: actions/checkout@v7
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Set up QEMU
-        uses: step-security/setup-qemu-action@v4
+        uses: step-security/setup-qemu-action@fe44c529aab16157fc475f4991a7f926aa9a02a2 # v4.1.0
       - name: Set up Docker Buildx
         id: buildx
-        uses: step-security/setup-buildx-action@v4
+        uses: step-security/setup-buildx-action@6997872a55d77391e51b87609556578131f44402 # v4.1.0
         with:
           install: true
       - name: Prepare
@@ -199,14 +229,14 @@ jobs:
           TAG=$(echo $GITHUB_SHA | head -c7)-${{ matrix.AWS_CLI_VERSION }}
           echo "tagged_image=${IMAGE}:${TAG}" >> ${GITHUB_OUTPUT}
       - name: Cache Docker layers
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ matrix.AWS_CLI_VERSION }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-${{ matrix.AWS_CLI_VERSION }}-
       - name: Build Docker Image
-        uses: docker/build-push-action@v7
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
         with:
           context: .
           builder: ${{ steps.buildx.outputs.name }}
